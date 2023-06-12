@@ -29,6 +29,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if (Auth::check()) {
+            $token = $request->user()->createToken($request->user()->name . ' personal token');
+            session(['token' => $token->plainTextToken]);
+        }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -37,6 +42,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        if (Auth::check()) {
+            $request->user()->tokens()->delete();
+            session()->forget('token');
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
