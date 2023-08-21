@@ -1,11 +1,13 @@
 "Indicates what fields are available at the top level of a query operation."
 type Query {
     "List multiple users."
-    users: [User!]! @all
+    users: [User!]!
 }
 
 type User {
     id: ID!
 
     name: String!
+
+    status: String!
 }
